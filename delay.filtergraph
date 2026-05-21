@@ -61,15 +61,16 @@
       </OUTPUTS>
     </LAYOUT>
   </FILTER>
-  <FILTER uid="5" x="0.6425" y="0.5443548387096774" useARA="0" uiLastX_Normal="326"
+  <FILTER uid="5" x="0.62125" y="0.5826612903225806" useARA="0" uiLastX_Normal="326"
           uiLastY_Normal="236" uiopen_Normal="0" uiLastX_Generic="174"
-          uiLastY_Generic="102" uiopen_Generic="0">
+          uiLastY_Generic="102" uiopen_Generic="0" uiLastX_IO="50" uiLastY_IO="114"
+          uiopen_IO="0">
     <PLUGIN name="Delay" format="VST3" category="Fx" manufacturer="yourcompany"
             version="1.0.0" file="C:\Program Files\Common Files\VST3\Delay.vst3\Contents\x86_64-win\Delay.vst3"
-            uniqueId="f1a0d32e" isInstrument="0" fileTime="19e09f50b29" infoUpdateTime="19e09f60305"
+            uniqueId="f1a0d32e" isInstrument="0" fileTime="19e4c29ac40" infoUpdateTime="19e4c2b7edc"
             numInputs="2" numOutputs="2" isShell="0" hasARAExtension="0"
             uid="e95303e5"/>
-    <STATE>363.VMjLgHV....O+fWarAhckI2bo8la8HRLt.iHfTlai8FYo41Y8HRUTYTK3HxO9.BOVMEUy.Ea0cVZtMEcgQWY9vSRC8Vav8lak4Fc9DCN33hUMoFSmI1Qt3hKt7zJlcUXxEDZisVRxH1a3vVX3fjTLQmKogjYTwVXogiQY8FMwjENHIUUTkEUKMCR38TNtHzSPUDahcFLVkkdUwlX4QyPOAUQpQUPvPDRuEkUOglXVg0azvFRlg0UXIWUWkENHI0R2gTZKYGR3sTN1MDUAkTUP0TPRokZvjFRpUkQgc1ZGU0avXUVncCZOcyMBQ0YIcEVyUkQisVRxHVNt3hKt3hKt3hKt3hKtQUUCUEQTg2ZrM1YQcUVDUjQicVPP4RPHQEY1UTLhkWPP4RPL4hKi4hKt3hKt3hKtXlTU0DUQAURWoULEYzXqEEUXoWQFwyKIMzasA2atUlaz4COuX0TTMCTrU2Yo41TzEFck4C.</STATE>
+    <STATE>511.VMjLgXe....O+fWarAhckI2bo8la8HRLt.iHfTlai8FYo41Y8HRUTYTK3HxO9.BOVMEUy.Ea0cVZtMEcgQWY9vSRC8Vav8lak4Fc9HSN43hUMoFSmgkSt3hKt7zJlcUXxEDZisVRxH1a3vVX3fjTLQmKogjYTwVXogiQY8FMwjENHIUUTkEUKMCR38TNtHzSPUDahcFLVkkdUwlX4QyPOAUQpQUPvPDRuEkUOglXVg0azvFRlg0UXIWUWkENHI0R2gTZKYGR3sTN1MDUAkTUP0TPRokZvjFRpUkQgc1ZGU0avXUVn4BZic1cVM1ZvjFRx3RZLQmXS4TLtjFS1Q0PLIiYSwDdTkFR0MyPOAUQpQUPvPDRuEkUOgFVVk0ZQwFVm0TLZglKnM1Y2Y0XqASZHEiXosjcHg2R4X2PTETRUAUSAIkVpASZHM2ZFQFZ2f1S23RUPIUQTMkYpYTV3fDdhoWUrI1Z3vFRlg0UXIWUWkENHIjS1MiPLg1Mn8zM2HDUmkzUXMWUFM1ZIIiX43hKt3hKt3hKt3hKt3FUUMTUDQEdqw1XmE0UYQTQFM1YAAkKAgDUjYWQwHVdAAkKAwjKtLlKt3hKt3hKt3hYRUUSTEETIckVwTjQisVTTgkdEYDOujzPu0Fbu4VYtQmO77hUSQ0LPwVcmklaSQWXzUlO..</STATE>
     <LAYOUT>
       <INPUTS>
         <BUS index="0" layout="L R"/>
