@@ -100,12 +100,13 @@ void DelayAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 	spec.sampleRate = sampleRate;
 	spec.maximumBlockSize = juce::uint32(samplesPerBlock);
     spec.numChannels = 2;
-	delayLine.prepare(spec);
 
 	double numSamples = (Parameters::maxDelayTime / 1000.0) * sampleRate;
 	int maxDelayInSamples = int(std::ceil(numSamples));
-	delayLine.setMaximumDelayInSamples(maxDelayInSamples);
-	delayLine.reset();
+	delayLineL.setMaximumDelayInSamples(maxDelayInSamples);
+	delayLineL.reset();
+    delayLineR.setMaximumDelayInSamples(maxDelayInSamples);
+    delayLineR.reset();
 
 	feedbackL = 0.0f;
 	feedbackR = 0.0f;
@@ -179,7 +180,6 @@ void DelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, [[mayb
 
 			float delayTime = params.tempoSync ? syncedTime : params.delayTime;
             float delayInSamples = (delayTime / 1000.0f) * sampleRate;
-            delayLine.setDelay(delayInSamples);
 
             if (params.lowCut != lastLowCut) {
                 lowCutFilter.setCutoffFrequency(params.lowCut);
@@ -197,11 +197,11 @@ void DelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, [[mayb
             float mono = (dryL + dryL) * 0.5f;
 
             //ping-pong delay: left channel feeds right and right channel feeds left
-            delayLine.pushSample(0, mono * params.panL + feedbackR);
-            delayLine.pushSample(1, mono * params.panR + feedbackL);
+            delayLineL.write(mono * params.panL + feedbackR);
+            delayLineR.write(mono * params.panR + feedbackL);
 
-            float wetL = delayLine.popSample(0);
-            float wetR = delayLine.popSample(1);
+			float wetL = delayLineL.read(delayInSamples);
+			float wetR = delayLineR.read(delayInSamples);
 
             feedbackL = wetL * params.feedback;
 			feedbackL = lowCutFilter.processSample(0,feedbackL);
@@ -225,12 +225,11 @@ void DelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, [[mayb
 
             float delayTime = params.tempoSync ? syncedTime : params.delayTime;
             float delayInSamples = (delayTime / 1000.0f) * sampleRate;
-            delayLine.setDelay(delayInSamples);
 
 			float dry = inputDataL[sample];
-			delayLine.pushSample(0, dry +feedbackL);
+			delayLineL.write(dry +feedbackL);
 
-            float wet = delayLine.popSample(0);
+			float wet = delayLineL.read(delayInSamples);
 			feedbackL = wet * params.feedback;
 	
             float mix = dry + wet * params.mix;
