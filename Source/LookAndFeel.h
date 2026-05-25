@@ -37,6 +37,15 @@ namespace Colors
 		const juce::Colour label{ 160,155,150 };
 		const juce::Colour outline{ 235,230,225 };
 	}
+
+	namespace Button
+	{
+		const juce::Colour text{ 80, 80, 80 };
+		const juce::Colour testToggled{ 40,40,40 };
+		const juce::Colour background{ 245,240,235 };
+		const juce::Colour backgroundToggled{ 255,250,245 };
+		const juce::Colour outline{ 235,230,225 };
+	}
 }
 
 
@@ -94,4 +103,25 @@ public:
 
 private:
 	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MainLookAndFeel)
+};
+
+
+class ButtonLookAndFeel : public juce::LookAndFeel_V4
+{
+public:
+	ButtonLookAndFeel();
+
+	static ButtonLookAndFeel* get() {
+		static ButtonLookAndFeel instance;
+		return &instance;
+	}
+
+	void drawButtonBackground(juce::Graphics& g, juce::Button& button, const juce::Colour& backgroundColour,
+		bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown) override;
+
+	void drawButtonText(juce::Graphics& g, juce::TextButton& button,
+		bool shouldDrawButtonAsHighlighted, bool shouldDrawButtonAsDown) override;
+
+private:
+	JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ButtonLookAndFeel)
 };
