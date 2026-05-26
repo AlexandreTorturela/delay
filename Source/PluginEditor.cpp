@@ -11,7 +11,7 @@
 
 //==============================================================================
 DelayAudioProcessorEditor::DelayAudioProcessorEditor (DelayAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p)
+    : AudioProcessorEditor (&p), audioProcessor (p), meter(p.levelL, p.levelR)
 {
 	setLookAndFeel(&mainLF);
 
@@ -39,6 +39,7 @@ DelayAudioProcessorEditor::DelayAudioProcessorEditor (DelayAudioProcessor& p)
 	outputGroup.setTextLabelPosition(juce::Justification::horizontallyCentred);
 	outputGroup.addAndMakeVisible(gainKnob);
 	outputGroup.addAndMakeVisible(mixKnob);
+	outputGroup.addAndMakeVisible(meter);
 	addAndMakeVisible(outputGroup);
 
 	updateDelayKnobs(audioProcessor.params.tempoSyncParam->get());
@@ -98,6 +99,8 @@ void DelayAudioProcessorEditor::resized()
 
 	lowCutKnob.setTopLeftPosition(feedbackKnob.getX(), stereoKnob.getBottom() + 10);
 	highCutKnob.setTopLeftPosition(lowCutKnob.getRight()+20, lowCutKnob.getY());
+
+	meter.setBounds(outputGroup.getWidth() - 45, 30, 30, gainKnob.getBottom() - 30);
 }
 
 void DelayAudioProcessorEditor::parameterValueChanged(int parameterIndex, float newValue)

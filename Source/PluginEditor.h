@@ -13,6 +13,7 @@
 #include "Parameters.h"
 #include "RotaryKnob.h"
 #include "LookAndFeel.h"
+#include "LevelMeter.h"
 
 //==============================================================================
 /**
@@ -53,6 +54,8 @@ private:
 	void parameterGestureChanged(int parameterIndex, bool gestureIsStarting) override {}
 
 	void updateDelayKnobs(bool tempoSyncActivate);
+
+    LevelMeter meter;
 
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DelayAudioProcessorEditor)

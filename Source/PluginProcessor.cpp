@@ -120,6 +120,9 @@ void DelayAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 	lastLowCut = lastHighCut = -1.0f;
 
 	tempo.reset();
+
+	levelL.reset();
+	levelR.reset();
 }
 
 void DelayAudioProcessor::releaseResources()
@@ -175,6 +178,8 @@ void DelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, [[mayb
 	float* outputDataR = mainOutput.getWritePointer(isMainOutputStereo ? 1 : 0); // If mono, write to the same channel
 
     if (isMainInputStereo) {
+		float maxL = 0.0f;
+		float maxR = 0.0f;
         for (int sample = 0; sample < buffer.getNumSamples(); ++sample) {
             params.smoothen(); // Smoothen the parameters for this sample
 
@@ -214,12 +219,19 @@ void DelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, [[mayb
             float mixL = dryL + wetL * params.mix;
             float mixR = dryR + wetR * params.mix;
 
-            outputDataL[sample] = mixL * params.gain;
-            outputDataR[sample] = mixR * params.gain;
-        }
+			float outL = mixL * params.gain;
+			float outR = mixR * params.gain;
+			outputDataL[sample] = outL;
+			outputDataR[sample] = outR;
 
+			maxL = std::max(maxL, std::abs(outL));
+			maxR = std::max(maxR, std::abs(outR));
+        }
+		levelL.updateIfGreater(maxL);
+		levelR.updateIfGreater(maxR);
     }
     else {
+		float maxL = 0.0f;
 		for (int sample = 0; sample < buffer.getNumSamples(); ++sample) {
 			params.smoothen(); // Smoothen the parameters for this sample
 
@@ -233,8 +245,12 @@ void DelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, [[mayb
 			feedbackL = wet * params.feedback;
 	
             float mix = dry + wet * params.mix;
-			outputDataL[sample] = mix * params.gain;
+
+			float out = mix * params.gain;
+			outputDataL[sample] = out;
+			maxL = std::max(maxL, std::abs(out));
 		}
+		levelL.updateIfGreater(maxL);
     }
 
 #if JUCE_DEBUG

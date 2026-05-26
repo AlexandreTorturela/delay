@@ -12,6 +12,7 @@
 #include "Parameters.h"
 #include "Tempo.h"
 #include "DelayLine.h"
+#include "Measurement.h"
 
 
 //==============================================================================
@@ -61,6 +62,8 @@ public:
     juce::AudioProcessorValueTreeState apvts{
         *this, nullptr, "Parameters", Parameters::createParameterLayout()
     };
+
+	Measurement levelL, levelR;
 
     Parameters params;  //ATENÇÃO À ORDEM DE INICIALIZAÇÃO, O apvts DEVE SER INICIALIZADO ANTES DO params, POIS O params DEPENDE DO apvts!
 
