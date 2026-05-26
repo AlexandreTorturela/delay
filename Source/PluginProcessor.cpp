@@ -126,8 +126,11 @@ void DelayAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 
 	delayInSamples = 0.0f;
 	targetDelay = 0.0f;
-	xfade = 0.0f;
-	xfadeInc = static_cast<float>(1.0 / (0.05 * sampleRate));	//50ms
+	fade = 1.0f;
+	fadeTarget = 1.0f;
+	coeff = 1.0f - std::exp(-1.0f / (0.05f * float(sampleRate)));	//50ms
+	wait = 0.0f;
+	waitInc = 1.0f / (0.3f * float(sampleRate));	//300ms
 }
 
 void DelayAudioProcessor::releaseResources()
@@ -188,14 +191,16 @@ void DelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, [[mayb
         for (int sample = 0; sample < buffer.getNumSamples(); ++sample) {
             params.smoothen(); // Smoothen the parameters for this sample
 
-			if (xfade == 0.0f) {
-				float delayTime = params.tempoSync ? syncedTime : params.delayTime;
-				float targetDelay = (delayTime / 1000.0f) * sampleRate;
-
+			float delayTime = params.tempoSync ? syncedTime : params.delayTime;
+			float newTargetDelay = (delayTime / 1000.0f) * sampleRate;
+			if (newTargetDelay != targetDelay) {
+				targetDelay = newTargetDelay;
 				if (delayInSamples == 0.0f)	//first time
 					delayInSamples = targetDelay;
-				else if (targetDelay != delayInSamples)	//start crossfade
-					xfade = xfadeInc;
+				else {
+					wait = waitInc;
+					fadeTarget = 0.0f;
+				}
 			}
 
             if (params.lowCut != lastLowCut) {
@@ -220,17 +225,15 @@ void DelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, [[mayb
 			float wetL = delayLineL.read(delayInSamples);
 			float wetR = delayLineR.read(delayInSamples);
 
-			if (xfade > 0.0f) {
-				float newL = delayLineL.read(targetDelay);
-				float newR = delayLineR.read(targetDelay);
-
-				wetL = (1.0f - xfade) * wetL + xfade * newL;
-				wetR = (1.0f - xfade) * wetR + xfade * newR;
-
-				xfade += xfadeInc;
-				if (xfade >= 1.0f) {
+			fade += (fadeTarget - fade)	* coeff;
+			wetL *= fade;
+			wetR *= fade;
+			if (wait > 0.0f) {
+				wait += waitInc;
+				if (wait >= 1.0f) {
 					delayInSamples = targetDelay;
-					xfade = 0.0f;
+					wait = 0.0f;
+					fadeTarget = 1.0f;
 				}
 			}
 
@@ -262,14 +265,16 @@ void DelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, [[mayb
 		for (int sample = 0; sample < buffer.getNumSamples(); ++sample) {
 			params.smoothen(); // Smoothen the parameters for this sample
 
-			if (xfade == 0.0f) {
-				float delayTime = params.tempoSync ? syncedTime : params.delayTime;
-				float targetDelay = (delayTime / 1000.0f) * sampleRate;
-
+			float delayTime = params.tempoSync ? syncedTime : params.delayTime;
+			float newTargetDelay = (delayTime / 1000.0f) * sampleRate;
+			if (newTargetDelay != targetDelay) {
+				targetDelay = newTargetDelay;
 				if (delayInSamples == 0.0f)	//first time
 					delayInSamples = targetDelay;
-				else if (targetDelay != delayInSamples)	//start crossfade
-					xfade = xfadeInc;
+				else {
+					wait = waitInc;
+					fadeTarget = 0.0f;
+				}
 			}
 
 			float dry = inputDataL[sample];
@@ -277,15 +282,14 @@ void DelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, [[mayb
 
 			float wet = delayLineL.read(delayInSamples);
 
-			if (xfade > 0.0f) {
-				float newL = delayLineL.read(targetDelay);
-
-				wet = (1.0f - xfade) * wet + xfade * newL;
-
-				xfade += xfadeInc;
-				if (xfade >= 1.0f) {
+			fade += (fadeTarget - fade) * coeff;
+			wet *= fade;
+			if (wait > 0.0f) {
+				wait += waitInc;
+				if (wait >= 1.0f) {
 					delayInSamples = targetDelay;
-					xfade = 0.0f;
+					wait = 0.0f;
+					fadeTarget = 1.0f;
 				}
 			}
 
