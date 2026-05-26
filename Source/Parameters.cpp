@@ -223,7 +223,8 @@ void Parameters::update() noexcept
 void Parameters::smoothen() noexcept
 {
 	gain = gainSmoother.getNextValue();
-	delayTime += (targetDelayTime - delayTime) * coeff;
+	//delayTime += (targetDelayTime - delayTime) * coeff;
+	delayTime = targetDelayTime;   //one-pole smoothing is not ideal for delay time, as it can cause pitch modulation. Consider using a different smoothing method.
 
 	mix = mixSmoother.getNextValue();
 
