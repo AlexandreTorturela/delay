@@ -46,6 +46,15 @@ namespace Colors
 		const juce::Colour backgroundToggled{ 255,250,245 };
 		const juce::Colour outline{ 235,230,225 };
 	}
+
+	namespace LevelMeter
+	{
+		const juce::Colour background{ 245, 240, 235 };
+		const juce::Colour tickLine{ 200,200,200 };
+		const juce::Colour tickLabel{ 80,80,80 };
+		const juce::Colour tooLoud{ 226,74,81 };
+		const juce::Colour levelOk{ 65,206,88 };
+	}
 }
 
 
