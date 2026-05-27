@@ -83,6 +83,16 @@ private:
 
 	Tempo tempo;
 
+    float delayInSamples = 0.0f;
+    float targetDelay = 0.0f;
+    float fade = 0.0f;
+	float fadeTarget = 0.0f;
+    float coeff = 0.0f;
+    float wait = 0.0f;
+    float waitInc = 0.0f;
+
+    juce::AudioProcessorParameter* getBypassParameter() const override;
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DelayAudioProcessor)
 };
