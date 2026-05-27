@@ -91,6 +91,8 @@ private:
     float wait = 0.0f;
     float waitInc = 0.0f;
 
+    juce::AudioProcessorParameter* getBypassParameter() const override;
+
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DelayAudioProcessor)
 };

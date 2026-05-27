@@ -251,6 +251,11 @@ void DelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, [[mayb
 			float outL = mixL * params.gain;
 			float outR = mixR * params.gain;
 
+			if (params.bypassed) {
+				outL = dryL;
+				outR = dryR;
+			}
+
 			outputDataL[sample] = outL;
 			outputDataR[sample] = outR;
 
@@ -299,6 +304,11 @@ void DelayAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, [[mayb
             float mix = dry + wet * params.mix;
 
 			float out = mix * params.gain;
+
+			if (params.bypassed) {
+				out = dry;
+			}
+
 			outputDataL[sample] = out;
 			maxL = std::max(maxL, std::abs(out));
 		}
@@ -347,3 +357,8 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
     return new DelayAudioProcessor();
 }
 
+
+juce::AudioProcessorParameter* DelayAudioProcessor::getBypassParameter() const
+{
+	return params.bypassParam;
+}
